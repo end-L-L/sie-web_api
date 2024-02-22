@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
+import os
 
 from pathlib import Path
 
@@ -25,7 +26,7 @@ SECRET_KEY = 'django-insecure-q@b%+c0k^#0701_j85qy0c4-(auhg8a0n-n37bqu7p2rqh1wz^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -37,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'core',
 ]
 
 MIDDLEWARE = [
@@ -75,8 +77,11 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'OPTIONS': {
+            'read_default_file': os.path.join(BASE_DIR, "my.cnf"),
+            'charset': 'utf8mb4',
+        }
     }
 }
 
