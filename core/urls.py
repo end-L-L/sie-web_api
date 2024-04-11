@@ -20,4 +20,6 @@ urlpatterns = [
     path('lista-alumnos/', alumnos.AlumnosAll.as_view()),
     # Create Maestro
     path('maestro/', maestros.MaestrosView.as_view()),
+    # Maestros Data
+    path('lista-maestros/', maestros.MaestrosAll.as_view())
 ]

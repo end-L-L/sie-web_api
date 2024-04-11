@@ -79,3 +79,17 @@ class MaestrosView(generics.CreateAPIView):
             return Response({"maestro_created_id": maestro.id }, 201)
 
         return Response(user.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class MaestrosAll(generics.CreateAPIView):
+    # Token Authentication
+    permission_classes = (permissions.IsAuthenticated,)
+    def get(self, request, *args, **kwargs):
+        maestros = Maestros.objects.filter(user__is_active = 1).order_by("id")
+        maestros = MaestroSerializer(maestros, many=True).data
+        # Parsea JSON
+        if not maestros:
+            return Response({},400)
+        for maestro in maestros:
+            maestro["materias_json"] = json.loads(maestro["materias_json"])
+
+        return Response(maestros, 200)
