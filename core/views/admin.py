@@ -76,3 +76,12 @@ class AdminView(generics.CreateAPIView):
             return Response({"admin_created_id": admin.id }, 201)
 
         return Response(user.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class AdminAll(generics.CreateAPIView):
+    # Token Authentication
+    permission_classes = (permissions.IsAuthenticated,)
+    def get(self, request, *args, **kwargs):
+        admin = Administradores.objects.filter(user__is_active = 1).order_by("id")
+        lista = AdminSerializer(admin, many=True).data
+        
+        return Response(lista, 200)

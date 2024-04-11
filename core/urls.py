@@ -12,6 +12,8 @@ urlpatterns = [
     path('logout/', auth.Logout.as_view()),
     # Create Admin
     path('admin/', admin.AdminView.as_view()),
+    # Admins Data
+    path('lista-admins/', admin.AdminAll.as_view()),
     # Create Alumno
     path('alumno/', alumnos.AlumnosView.as_view()),
     # Create Maestro
