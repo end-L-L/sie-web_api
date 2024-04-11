@@ -79,3 +79,12 @@ class AlumnosView(generics.CreateAPIView):
             return Response({"alumno_created_id": alumno.id }, 201)
 
         return Response(user.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class AlumnosAll(generics.CreateAPIView):
+    # Token Authentication
+    permission_classes = (permissions.IsAuthenticated,)
+    def get(self, request, *args, **kwargs):
+        alumnos = Alumnos.objects.filter(user__is_active = 1).order_by("id")
+        lista = AlumnoSerializer(alumnos, many=True).data
+        
+        return Response(lista, 200)

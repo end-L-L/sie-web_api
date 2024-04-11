@@ -16,6 +16,8 @@ urlpatterns = [
     path('lista-admins/', admin.AdminAll.as_view()),
     # Create Alumno
     path('alumno/', alumnos.AlumnosView.as_view()),
+    # Alumnos Data
+    path('lista-alumnos/', alumnos.AlumnosAll.as_view()),
     # Create Maestro
     path('maestro/', maestros.MaestrosView.as_view()),
 ]
