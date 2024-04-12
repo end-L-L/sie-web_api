@@ -14,6 +14,8 @@ urlpatterns = [
     path('admin/', admin.AdminView.as_view()),
     # Admins Data
     path('lista-admins/', admin.AdminAll.as_view()),
+    # Edit Admin
+    path('admin-edit/', admin.AdminViewEdit.as_view()),
     # Create Alumno
     path('alumno/', alumnos.AlumnosView.as_view()),
     # Alumnos Data

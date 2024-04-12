@@ -31,6 +31,12 @@ import random
 import json
 
 class AdminView(generics.CreateAPIView):
+    # Obtener Admin por ID
+    def get(self, request, *args, **kwargs):
+        admin = get_object_or_404(Administradores, id = request.GET.get("id"))
+        admin = AdminSerializer(admin, many=False).data
+
+        return Response(admin, 200)
 
     #Registrar Nuevo Administrador
     @transaction.atomic
@@ -85,3 +91,24 @@ class AdminAll(generics.CreateAPIView):
         lista = AdminSerializer(admin, many=True).data
         
         return Response(lista, 200)
+    
+class AdminViewEdit(generics.CreateAPIView):
+    permission_classes = (permissions.IsAuthenticated,) 
+    
+    # Editar administrador
+    def put(self, request, *args, **kwargs):
+        # iduser=request.data["id"]
+        admin = get_object_or_404(Administradores, id=request.data["id"])
+        admin.clave_admin = request.data["clave_admin"]
+        admin.telefono = request.data["telefono"]
+        admin.rfc = request.data["rfc"]
+        admin.edad = request.data["edad"]
+        admin.ocupacion = request.data["ocupacion"]
+        admin.save()
+        temp = admin.user
+        temp.first_name = request.data["first_name"]
+        temp.last_name = request.data["last_name"]
+        temp.save()
+        user = AdminSerializer(admin, many=False).data
+
+        return Response(user,200)
