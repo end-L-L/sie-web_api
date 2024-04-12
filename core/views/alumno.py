@@ -30,9 +30,16 @@ import string
 import random
 import json
 
-class AlumnosView(generics.CreateAPIView):
+class AlumnoView(generics.CreateAPIView):
+
+    # Obtener Usuario por ID
+    def get(self, request, *args, **kwargs):
+        alumno = get_object_or_404(Alumnos, id = request.GET.get("id"))
+        alumno = AlumnoSerializer(alumno, many=False).data
+
+        return Response(alumno, 200)
     
-    #POST Registrar Alumno
+    # POST Registrar Alumno
     @transaction.atomic
     def post(self, request, *args, **kwargs):
 
@@ -88,3 +95,25 @@ class AlumnosAll(generics.CreateAPIView):
         lista = AlumnoSerializer(alumnos, many=True).data
         
         return Response(lista, 200)
+    
+
+class AlumnoViewEdit(generics.CreateAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    def put(self, request, *args, **kwargs):
+        # iduser=request.data["id"]
+        profile = get_object_or_404(Alumnos, id=request.data["id"])
+        profile.fecha_nacimiento = request.data["fecha_nacimiento"]
+        profile.curp = request.data["curp"]
+        profile.rfc = request.data["rfc"]
+        profile.edad = request.data["edad"]
+        profile.telefono = request.data["telefono"]
+        profile.ocupacion = request.data["ocupacion"]
+        profile.matricula = request.data["matricula"]
+        profile.save()
+        temp = profile.user
+        temp.first_name = request.data["first_name"]
+        temp.last_name = request.data["last_name"]
+        temp.save()
+        user = AlumnoSerializer(profile, many=False).data
+
+        return Response(user,200)
