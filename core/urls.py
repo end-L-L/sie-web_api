@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 from .views import alumnos
-from .views import maestros
+from .views import maestro
 from .views import admin
 from .views import auth
 
@@ -21,7 +21,9 @@ urlpatterns = [
     # Alumnos Data
     path('lista-alumnos/', alumnos.AlumnosAll.as_view()),
     # Create Maestro
-    path('maestro/', maestros.MaestrosView.as_view()),
+    path('maestro/', maestro.MaestroView.as_view()),
     # Maestros Data
-    path('lista-maestros/', maestros.MaestrosAll.as_view())
+    path('lista-maestros/', maestro.MaestrosAll.as_view()),
+    # Edit Maestro
+    path('maestro-edit/', maestro.MaestroViewEdit.as_view())
 ]

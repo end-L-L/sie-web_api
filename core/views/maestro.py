@@ -30,9 +30,16 @@ import string
 import random
 import json
 
-class MaestrosView(generics.CreateAPIView):
+class MaestroView(generics.CreateAPIView):
+
+    # Obtener Usuario por ID
+    def get(self, request, *args, **kwargs):
+        maestro = get_object_or_404(Maestros, id = request.GET.get("id"))
+        maestro = MaestroSerializer(maestro, many=False).data
+        maestro["materias_json"] = json.loads(maestro["materias_json"])
+        return Response(maestro, 200)
     
-    #POST Registrar Maestro
+    # POST Registrar Maestro
     @transaction.atomic
     def post(self, request, *args, **kwargs):
 
@@ -93,3 +100,26 @@ class MaestrosAll(generics.CreateAPIView):
             maestro["materias_json"] = json.loads(maestro["materias_json"])
 
         return Response(maestros, 200)
+    
+
+class MaestroViewEdit(generics.CreateAPIView):
+    # Token Authentication
+    permission_classes = (permissions.IsAuthenticated,)
+    def put(self, request, *args, **kwargs):
+        # iduser=request.data["id"]
+        maestro = get_object_or_404(Maestros, id=request.data["id"])
+        maestro.id_trabajador = request.data["id_trabajador"]
+        maestro.fecha_nacimiento = request.data["fecha_nacimiento"]
+        maestro.telefono = request.data["telefono"]
+        maestro.rfc = request.data["rfc"]
+        maestro.cubiculo = request.data["cubiculo"]
+        maestro.area_investigacion = request.data["area_investigacion"]
+        maestro.materias_json = json.dumps(request.data["materias_json"])
+        maestro.save()
+        temp = maestro.user
+        temp.first_name = request.data["first_name"]
+        temp.last_name = request.data["last_name"]
+        temp.save()
+        user = MaestroSerializer(maestro, many=False).data
+
+        return Response(user,200)
