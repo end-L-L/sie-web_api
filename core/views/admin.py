@@ -38,7 +38,7 @@ class AdminView(generics.CreateAPIView):
 
         return Response(admin, 200)
 
-    #Registrar Nuevo Administrador
+    # Registrar Nuevo Administrador
     @transaction.atomic
     def post(self, request, *args, **kwargs):
         user = UserSerializer(data=request.data)
@@ -49,7 +49,7 @@ class AdminView(generics.CreateAPIView):
             email = request.data['email']
             password = request.data['password']
             
-            #Valida Usuario o Email Registrado
+            # Valida Usuario o Email Registrado
             existing_user = User.objects.filter(email=email).first()
 
             if existing_user:
@@ -94,8 +94,8 @@ class AdminAll(generics.CreateAPIView):
     
 class AdminViewEdit(generics.CreateAPIView):
     permission_classes = (permissions.IsAuthenticated,) 
-    
-    # Editar administrador
+
+    # Editar Administrador
     def put(self, request, *args, **kwargs):
         # iduser=request.data["id"]
         admin = get_object_or_404(Administradores, id=request.data["id"])
@@ -113,6 +113,7 @@ class AdminViewEdit(generics.CreateAPIView):
 
         return Response(user,200)
     
+    # Eliminar Administrador
     def delete(self, request, *args, **kwargs):
         admin = get_object_or_404(Administradores, id=request.GET.get("id"))
         try:
@@ -120,3 +121,24 @@ class AdminViewEdit(generics.CreateAPIView):
             return Response({"details":"Administraor eliminado"},200)
         except Exception as e:
             return Response({"details":"Algo pasó al eliminar"},400)
+        
+    # Contar el Total de cada Tipo de Usuarios
+    def get(self, request, *args, **kwargs):
+        
+        # Obtener Total de Administradores
+        admin = Administradores.objects.filter(user__is_active = 1).order_by("id")
+        lista_admins = AdminSerializer(admin, many=True).data
+        total_admins = len(lista_admins)
+
+        # Obtener Total de Alumnos
+        alumnos = Alumnos.objects.filter(user__is_active = 1).order_by("id")
+        lista_alumnos = AlumnoSerializer(alumnos, many=True).data
+        total_alumnos = len(lista_alumnos)
+
+        # Obtener Total de Maestros
+        maestros = Maestros.objects.filter(user__is_active = 1).order_by("id")
+        lista_maestros = MaestroSerializer(maestros, many=True).data
+        total_maestros = len(lista_maestros)
+
+        # Respuesta
+        return Response({'admins': total_admins, 'maestros': total_maestros, 'alumnos':total_alumnos }, 200)
