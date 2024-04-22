@@ -29,3 +29,18 @@ class MaestroSerializer(serializers.ModelSerializer):
     class Meta:
         model = Maestros
         fields = '__all__'
+
+# Serializers para Materia
+class MateriaSerializer(serializers.ModelSerializer):
+    nrc = serializers.IntegerField(read_only=True)
+    nombre = serializers.CharField(required=True)
+
+    class Meta:
+        model = Materias
+        fields = ('nrc','nombre')
+
+class MateriasSerializer(serializers.ModelSerializer):
+    materia=MateriaSerializer(read_only=True)
+    class Meta:
+        model = Materias
+        fields = "__all__"

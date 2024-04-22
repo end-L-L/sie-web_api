@@ -1,9 +1,10 @@
 from django.contrib import admin
 from django.urls import path
+from .views import auth
 from .views import alumno
 from .views import maestro
 from .views import admin
-from .views import auth
+from .views import materia
 
 urlpatterns = [
     # Login
@@ -27,5 +28,11 @@ urlpatterns = [
     # Maestros Data
     path('lista-maestros/', maestro.MaestrosAll.as_view()),
     # Edit Maestro
-    path('maestro-edit/', maestro.MaestroViewEdit.as_view())
+    path('maestro-edit/', maestro.MaestroViewEdit.as_view()),
+    # Create Materia
+    path('materia/', materia.MateriaView.as_view()),
+     # Materias Data
+    path('lista-materias/', materia.MateriasAll.as_view()),
+    # Edit Materia
+    path('materia-edit/', materia.MateriaViewEdit.as_view())
 ]
