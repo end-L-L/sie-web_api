@@ -36,9 +36,11 @@ class MateriasAll(generics.CreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     def get(self, request, *args, **kwargs):
         materias = Materias.objects.order_by("nrc")
-        lista = MateriasSerializer(materias, many=True).data
-        
-        return Response(lista, 200)
+        materias = MateriasSerializer(materias, many=True).data
+        for materia in materias:
+            materia["dias_json"] = json.loads(materia["dias_json"])
+                
+        return Response(materias, 200)
 
 # Transacciones de Materia
 class MateriaView(generics.CreateAPIView):
@@ -50,7 +52,7 @@ class MateriaView(generics.CreateAPIView):
         materia["dias_json"] = json.loads(materia["dias_json"])
         return Response(materia, 200)
 
-    #Registrar Materia
+    # Registrar Materia
     @transaction.atomic
     def post(self, request, *args, **kwargs):
 
@@ -103,6 +105,6 @@ class MateriaViewEdit(generics.CreateAPIView):
         materia = get_object_or_404(Materias, nrc=request.GET.get("nrc"))
         try:
             materia.delete()
-            return Response({"details":"Materia Eliminada"},200)
+            return Response({"details":"materia eliminada"},200)
         except Exception as e:
-            return Response({"details":"Error"},400)
+            return Response({"details":"error"},400)

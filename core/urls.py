@@ -31,7 +31,7 @@ urlpatterns = [
     path('maestro-edit/', maestro.MaestroViewEdit.as_view()),
     # Create Materia
     path('materia/', materia.MateriaView.as_view()),
-     # Materias Data
+    # Materias Data
     path('lista-materias/', materia.MateriasAll.as_view()),
     # Edit Materia
     path('materia-edit/', materia.MateriaViewEdit.as_view())

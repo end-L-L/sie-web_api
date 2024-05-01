@@ -32,8 +32,7 @@ import random
 class CustomAuthToken(ObtainAuthToken):
 
     def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data,
-                                           context={'request': request})
+        serializer = self.serializer_class(data=request.data, context={'request': request})
 
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
@@ -42,7 +41,7 @@ class CustomAuthToken(ObtainAuthToken):
             role_names = []
             for role in roles:
                 role_names.append(role.name)
-            #Si solo es un rol especifico asignamos el elemento 0
+            # Si solo es un rol especifico asignamos el elemento 0
             role_names = role_names[0]
 
             token, created = Token.objects.get_or_create(user=user)
@@ -85,6 +84,5 @@ class Logout(generics.GenericAPIView):
             token.delete()
 
             return Response({'logout':True})
-
 
         return Response({'logout': False})

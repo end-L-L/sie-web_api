@@ -51,7 +51,7 @@ class MaestroView(generics.CreateAPIView):
             email = request.data['email']
             password = request.data['password']
             
-            #Valida Usuario o Email Registrado
+            # Valida Usuario o Email Registrado
             existing_user = User.objects.filter(email=email).first()
 
             if existing_user:
@@ -86,6 +86,7 @@ class MaestroView(generics.CreateAPIView):
             return Response({"maestro_created_id": maestro.id }, 201)
 
         return Response(user.errors, status=status.HTTP_400_BAD_REQUEST)
+    
     
 class MaestrosAll(generics.CreateAPIView):
     # Token Authentication
@@ -128,6 +129,6 @@ class MaestroViewEdit(generics.CreateAPIView):
         maestro = get_object_or_404(Maestros, id=request.GET.get("id"))
         try:
             maestro.user.delete()
-            return Response({"details":"Maestro eliminado"},200)
+            return Response({"details":"maestro eliminado"},200)
         except Exception as e:
-            return Response({"details":"Algo pasó al eliminar"},400)
+            return Response({"details":"error"},400)
